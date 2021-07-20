@@ -61,5 +61,5 @@ spec:
           spec:
             containers:
             - name: instructions
-              image: edu-educates-template
+              image: spring-native-eduk8s-intro
               # NOTE: always make sure your workshop YAML ends with the files deployment
