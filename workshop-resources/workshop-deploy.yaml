@@ -13,7 +13,7 @@ spec:
   content:
     # Use the default image, one of the pre-existing ones, or you can build your own
     # https://docs.edukates.io/en/develop/runtime-environment/workshop-definition.html#container-image-for-the-workshop
-    image: jdk11-environment:*
+    image: ghcr.io/eduk8s-labs/eduk8s-labs/graalvm-environment:6a31d73df1a66098549c3ca2596c66868154579b
     files: http://files.$(workshop_namespace).svc.cluster.local/workshop.tar.gz
   session:
     applications:
