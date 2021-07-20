@@ -1,0 +1,45 @@
+name: Pull Request Preview
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  build:
+    name: Staging Release
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Build Workshop Archive
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+        run: |
+          make build version=pr$PR_NUMBER
+      - name: Login to GitHub Package Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Publish version to GitHub Package Registry
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+        run: |
+          make release version=pr$PR_NUMBER
+      - name: Deploy to Peer Review Environment
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+          TMC_API_TOKEN: ${{ secrets.TMC_API_TOKEN }}
+          ESP_CLUSTER_NAME: ${{ secrets.TMC_API_TOKEN }}
+        # The TMC stuff is super clunky/nasty, gotta be a better way?
+        run: |
+          BINARIES=$(curl 'https://rocs.tmc.cloud.vmware.com/v1alpha/system/binaries')
+          LATEST=$(echo $BINARIES | jq '.latestVersion')
+          LINK=$(echo $BINARIES | jq -r .versions.$LATEST.linuxX64)
+          wget -q $LINK
+          chmod +x ./tmc
+          PATH=$PATH:$(pwd)
+          tmc login --name foo --no-configure
+          tmc cluster auth kubeconfig get `make get-esp-preview-cluster` -m aws-hosted -p esp-stg > kubeconfig
+          export KUBECONFIG=kubeconfig
+          make educates-deploy
+      #TODO - name: Comment on PR with URL to deployed workshop
