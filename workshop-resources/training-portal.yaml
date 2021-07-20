@@ -2,7 +2,7 @@
 apiVersion: training.eduk8s.io/v1alpha1
 kind: TrainingPortal
 metadata:
-  name: edu-educates-template
+  name: spring-native-eduk8s-intro
 spec:
   portal:
     registration:
@@ -10,7 +10,7 @@ spec:
     updates:
       workshop: true
   workshops:
-  - name: edu-educates-template
+  - name: spring-native-eduk8s-intro
     capacity: 1
     expires: 180m
     orphaned: 5m

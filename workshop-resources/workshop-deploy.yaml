@@ -2,14 +2,14 @@
 apiVersion: training.eduk8s.io/v1alpha2
 kind: Workshop
 metadata:
-  name: edu-educates-template
+  name: spring-native-eduk8s-intro
 spec:
-  title: My Workshop
-  description: My Workshop Description
+  title: Spring Native with GraalVM - an Introduction
+  description: Learn how to build a JVM, respectively Native Image for a Spring project
   vendor: eduk8s.io
   difficulty: beginner
   duration: 120m
-  url: https://github.com/vmware-tanzu-private/edu-educates-template
+  url: https://github.com/ddobrin/spring-native-eduk8s-intro
   content:
     # Use the default image, one of the pre-existing ones, or you can build your own
     # https://docs.edukates.io/en/develop/runtime-environment/workshop-definition.html#container-image-for-the-workshop
